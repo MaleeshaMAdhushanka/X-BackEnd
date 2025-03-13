@@ -2,39 +2,60 @@ package lk.ecommerce.zeetradexbackend.entity;
 
 import jakarta.persistence.*;
 import lk.ecommerce.zeetradexbackend.enums.USER_ROLE;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "user")
-public class User implements UserDetails {
+@Table(name = "users")
+public class User {
+
     @Id
-   private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @Column(nullable = false)
-   private String password;
+    private String fullName;
 
-   @Enumerated(EnumType.STRING)
-   @Column(nullable = false)
-   private USER_ROLE role;
+    private String email;
+
+    private String mobile;
+
+    private String password;
+
+    private Boolean status;
+
+    private Boolean isVerified;
+
+    private Boolean twoFactorAuthEnabled;
+
+    private String twoFactorAuthSendTo;
+
+    private String picture;
+
+    private String role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Assets> assets;
+
+    @OneToMany(mappedBy = "user")
+    private List<Withdrawal> withdrawals;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private List<Wallet> wallets;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
-        return authorities;
-    }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+
+
+
 }
