@@ -12,4 +12,12 @@ public class OrderItem {
     private Double quantity;
     private Double buyPrice;
     private Double sellPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "coin_id", nullable = false)
+    private Coin coin;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 }

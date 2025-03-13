@@ -1,11 +1,11 @@
 package lk.ecommerce.zeetradexbackend.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "market_chart_data")
 public class MarketChartDataEntity {
 
     @Id

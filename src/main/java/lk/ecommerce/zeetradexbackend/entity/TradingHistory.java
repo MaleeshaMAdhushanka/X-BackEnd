@@ -12,4 +12,12 @@ public class TradingHistory {
     private Double sellingPrice;
     private Double buyingPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "coin_id", nullable = false)
+    private Coin coin;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }

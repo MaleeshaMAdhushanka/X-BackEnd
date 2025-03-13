@@ -14,5 +14,9 @@ public class Withdrawal {
     private Double amount;
     private LocalDateTime date;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
 }

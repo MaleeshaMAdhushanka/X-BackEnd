@@ -1,14 +1,13 @@
 package lk.ecommerce.zeetradexbackend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 @Entity
 @Table(name = "wallet_transactions")
 public class WalletTransaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String type;
@@ -16,4 +15,8 @@ public class WalletTransaction {
     private String transferId;
     private String purpose;
     private Double amount;
+
+    @ManyToOne
+    @JoinColumn(name = "wallet_id", nullable = false)
+    private Wallet wallet;
 }

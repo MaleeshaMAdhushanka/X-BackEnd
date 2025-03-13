@@ -10,8 +10,16 @@ public class Assets {
     private Long id;
 
 
-    private Double quatity;
+    private Double quantity;
 
     private Double buyPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "coin_id", nullable = false)
+    private Coin coin;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

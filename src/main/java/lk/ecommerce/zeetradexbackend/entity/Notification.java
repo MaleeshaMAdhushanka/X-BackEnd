@@ -11,4 +11,13 @@ public class Notification {
 
     private Double amount;
     private String message;
+
+    @ManyToOne
+    @JoinColumn(name = "from_user_id")
+    private User fromUser;
+
+    @ManyToOne
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
+
 }

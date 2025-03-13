@@ -12,4 +12,8 @@ public class ForgotPasswordTokens {
     private String otp;
     private String verificationType;
     private String sendTo;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
