@@ -1,6 +1,8 @@
 package lk.ecommerce.zeetradexbackend.controller;
 
+import lk.ecommerce.zeetradexbackend.config.JwtProvider;
 import lk.ecommerce.zeetradexbackend.entity.User;
+import lk.ecommerce.zeetradexbackend.response.AuthResponse;
 import lk.ecommerce.zeetradexbackend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +22,9 @@ public class AuthController {
     private UserRepo userRepo;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) {
 
-        org.springframework.security.core.userdetails.User isUserExist = userRepo.findByEmail(user.getEmail());
+        User isUserExist = userRepo.findByEmail(user.getEmail());
 
         if (isUserExist != null) {
             throw new RuntimeException("User email already exist Used With Another Account");
@@ -44,7 +46,15 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        //after creating jwt token we need to send it to the fontend
+        String jwt= JwtProvider.generateToken(auth);
+
+        AuthResponse res = new AuthResponse();
+        res.setJwt(jwt);
+        res.setStatus(true);
+        res.setMessage("register success");
+
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
 
         
     }
