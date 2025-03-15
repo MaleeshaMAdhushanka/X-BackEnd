@@ -29,7 +29,6 @@ public class User {
     private Boolean isVerified;
 
     @Embedded
-
     private TwoFactorAuth twoFactorAuth = new TwoFactorAuth();
     private Boolean twoFactorAuthEnabled;
 
