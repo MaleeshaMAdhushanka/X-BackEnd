@@ -37,7 +37,7 @@ public class Coin {
     private Double fullyDilutedValuation;
 
     @JsonProperty("total_volume")
-    private Double totalVolume;
+    private Long totalVolume;
 
     @JsonProperty("high_24h")
     private Double high24h;
@@ -52,16 +52,16 @@ public class Coin {
     private Double priceChangePercentage24h;
 
     @JsonProperty("market_cap_change_24h")
-    private Double marketCapChange24h;
+    private Long marketCapChange24h;
 
     @JsonProperty("market_cap_change_percentage_24h")
-    private Double marketCapChangePercentage24h;
+    private Long marketCapChangePercentage24h;
 
     @JsonProperty("circulating_supply")
     private Double circulatingSupply;
 
     @JsonProperty("total_supply")
-    private Double totalSupply;
+    private Long totalSupply;
 
     @JsonProperty("max_supply")
     private Double maxSupply;
@@ -155,11 +155,11 @@ public class Coin {
         this.fullyDilutedValuation = fullyDilutedValuation;
     }
 
-    public Double getTotalVolume() {
+    public Long getTotalVolume() {
         return totalVolume;
     }
 
-    public void setTotalVolume(Double totalVolume) {
+    public void setTotalVolume(Long totalVolume) {
         this.totalVolume = totalVolume;
     }
 
@@ -195,19 +195,20 @@ public class Coin {
         this.priceChangePercentage24h = priceChangePercentage24h;
     }
 
-    public Double getMarketCapChange24h() {
+
+    public Long getMarketCapChange24h() {
         return marketCapChange24h;
     }
 
-    public void setMarketCapChange24h(Double marketCapChange24h) {
+    public void setMarketCapChange24h(Long marketCapChange24h) {
         this.marketCapChange24h = marketCapChange24h;
     }
 
-    public Double getMarketCapChangePercentage24h() {
+    public Long getMarketCapChangePercentage24h() {
         return marketCapChangePercentage24h;
     }
 
-    public void setMarketCapChangePercentage24h(Double marketCapChangePercentage24h) {
+    public void setMarketCapChangePercentage24h(Long marketCapChangePercentage24h) {
         this.marketCapChangePercentage24h = marketCapChangePercentage24h;
     }
 
@@ -219,11 +220,11 @@ public class Coin {
         this.circulatingSupply = circulatingSupply;
     }
 
-    public Double getTotalSupply() {
+    public Long getTotalSupply() {
         return totalSupply;
     }
 
-    public void setTotalSupply(Double totalSupply) {
+    public void setTotalSupply(Long totalSupply) {
         this.totalSupply = totalSupply;
     }
 
