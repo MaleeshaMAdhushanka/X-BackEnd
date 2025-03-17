@@ -1,8 +1,10 @@
 package lk.ecommerce.zeetradexbackend.controller;
 
+import lk.ecommerce.zeetradexbackend.entity.Order;
 import lk.ecommerce.zeetradexbackend.entity.User;
 import lk.ecommerce.zeetradexbackend.entity.Wallet;
 import lk.ecommerce.zeetradexbackend.entity.WalletTransaction;
+import lk.ecommerce.zeetradexbackend.service.OrderService;
 import lk.ecommerce.zeetradexbackend.service.UserService;
 import lk.ecommerce.zeetradexbackend.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,12 @@ public class WalletController {
 
     @Autowired
     private WalletService walletService;
-
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
+
 
 
     @GetMapping("/api/wallet")
@@ -30,7 +36,7 @@ public class WalletController {
 
     }
 
-
+    @PutMapping("/api/wallet/${walletId}/transfer")
     public ResponseEntity<Wallet> walletToWalletTransfer(@RequestHeader("Authorization") String jwt,
                                                          @RequestBody Long walletId,
                                                          @RequestBody WalletTransaction req) throws Exception {
@@ -38,7 +44,21 @@ public class WalletController {
         Wallet senderWallet = walletService.getUserWallet(senderUser);
         Wallet receiverWallet = walletService.findWalletById(walletId);
         Wallet wallet = walletService.walletToWalletTransfer(senderUser, senderWallet, receiverWallet, req.getAmount());
-        return null;
+        return new ResponseEntity<>(wallet, HttpStatus.OK);
+    }
+
+
+    @PutMapping("/api/wallet/order/{orderId}/pay")
+    public ResponseEntity<Wallet> payOrderPayment(@RequestHeader("Authorization") String jwt,
+                                                         @RequestBody Long orderId
+    ) throws Exception {
+       //Order API
+        User senderUser = userService.findUserProfileByJwt(jwt);
+
+        Order order = orderService.getOrderById(orderId);
+
+        Wallet wallet = walletService.payOrderPayment(order, user);
+
     }
 
 
