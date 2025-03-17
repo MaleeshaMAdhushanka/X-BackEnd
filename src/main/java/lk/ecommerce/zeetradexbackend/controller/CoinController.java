@@ -47,7 +47,32 @@ public class CoinController {
         return ResponseEntity.ok(jsonNode);
     }
 
-    ResponseEntity<>
+    @GetMapping("/top50")
+    ResponseEntity<JsonNode> getTop50CoinsByMarketCapRank() throws Exception {
+        String coin = coinService.getTop50CoinsByMarketCapRank();
+
+        JsonNode jsonNode = objectMapper.readTree(coin);
+
+        return ResponseEntity.ok(jsonNode);
+    }
+
+    @GetMapping("/trending")
+    ResponseEntity<JsonNode> getTradingCoin() throws Exception {
+        String coin = coinService.getTreadingCoins();
+
+        JsonNode jsonNode = objectMapper.readTree(coin);
+
+        return ResponseEntity.ok(jsonNode);
+    }
+
+    @GetMapping("/details/{coinId}")
+    ResponseEntity<JsonNode> getCoinDetails(@PathVariable String coinId) throws Exception {
+      String coin =  coinService.getCoinDetails(coinId);
+      JsonNode jsonNode = objectMapper.readTree(coin);
+
+      return ResponseEntity.ok(jsonNode);
+
+    }
 
 
 
