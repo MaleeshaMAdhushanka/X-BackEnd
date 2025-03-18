@@ -53,12 +53,13 @@ public class WalletController {
                                                          @RequestBody Long orderId
     ) throws Exception {
        //Order API
-        User senderUser = userService.findUserProfileByJwt(jwt);
+        User user = userService.findUserProfileByJwt(jwt);
 
         Order order = orderService.getOrderById(orderId);
 
         Wallet wallet = walletService.payOrderPayment(order, user);
 
+        return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
 
 

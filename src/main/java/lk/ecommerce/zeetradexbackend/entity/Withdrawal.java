@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class Withdrawal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String status;
     private Double amount;
