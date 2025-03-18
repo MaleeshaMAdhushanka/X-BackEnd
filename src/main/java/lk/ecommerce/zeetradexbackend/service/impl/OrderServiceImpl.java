@@ -9,13 +9,14 @@ import lk.ecommerce.zeetradexbackend.service.OrderService;
 import lk.ecommerce.zeetradexbackend.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -111,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderType(OrderType.SELL);
             Order savedOrder = orderRepo.save(order);
 
-            Assets updatedAsset = assetService.updateAsset(assetToSell.getId(), -quantity);
+            Asset updatedAsset = assetService.updateAsset(assetToSell.getId(), -quantity);
             if (updatedAsset.getQuantity()*coin.getCurrentPrice() <=1) {
                 assetService.deleteAsset(updatedAsset.getId());
             }

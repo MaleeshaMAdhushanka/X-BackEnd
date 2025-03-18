@@ -40,7 +40,7 @@ public class User {
     private USER_ROLE role=USER_ROLE.ROLE_CUSTOMER;
 
     @OneToMany(mappedBy = "user")
-    private List<Assets> assets;
+    private List<Asset> assets;
 
     @OneToMany(mappedBy = "user")
     private List<Withdrawal> withdrawals;
@@ -148,11 +148,11 @@ public class User {
         this.role = role;
     }
 
-    public List<Assets> getAssets() {
+    public List<Asset> getAssets() {
         return assets;
     }
 
-    public void setAssets(List<Assets> assets) {
+    public void setAssets(List<Asset> assets) {
         this.assets = assets;
     }
 
