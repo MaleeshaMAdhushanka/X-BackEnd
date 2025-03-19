@@ -8,7 +8,7 @@ public interface WatchlistService {
 
     //findUserWatchlist
 
-    Watchlists findUserWatchlist(Long userId);
+    Watchlists findUserWatchlist(Long userId) throws Exception;
 
 
 
@@ -19,11 +19,11 @@ public interface WatchlistService {
 
     //find by Id
 
-    Watchlists findById(Long id);
+    Watchlists findById(Long id) throws Exception;
 
 
     //add Item to watch list
-    Coin addItemToWatchlist(Coin coin, User user);
+    Coin addItemToWatchlist(Coin coin, User user) throws Exception;
 
 
 
