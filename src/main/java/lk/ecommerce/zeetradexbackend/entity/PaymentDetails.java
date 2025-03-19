@@ -2,6 +2,7 @@ package lk.ecommerce.zeetradexbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lk.ecommerce.zeetradexbackend.service.PaymentDetailsService;
 
 //use have made withdrawal admin money will transfer to user account
 //give money to user(admin made the user bank details)
