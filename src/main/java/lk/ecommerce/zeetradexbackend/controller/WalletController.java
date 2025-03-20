@@ -1,10 +1,9 @@
 package lk.ecommerce.zeetradexbackend.controller;
 
-import lk.ecommerce.zeetradexbackend.entity.Order;
-import lk.ecommerce.zeetradexbackend.entity.User;
-import lk.ecommerce.zeetradexbackend.entity.Wallet;
-import lk.ecommerce.zeetradexbackend.entity.WalletTransaction;
+import lk.ecommerce.zeetradexbackend.entity.*;
+import lk.ecommerce.zeetradexbackend.response.PaymentResponse;
 import lk.ecommerce.zeetradexbackend.service.OrderService;
+import lk.ecommerce.zeetradexbackend.service.PaymentService;
 import lk.ecommerce.zeetradexbackend.service.UserService;
 import lk.ecommerce.zeetradexbackend.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,10 @@ public class WalletController {
 
     @Autowired
     private OrderService orderService;
+
+
+    @Autowired
+    private PaymentService paymentService;
 
 
 
@@ -61,6 +64,38 @@ public class WalletController {
 
         return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
     }
+
+
+    @PutMapping("/api/wallet/deposit")
+    public ResponseEntity<Wallet> addBalanceToWallet(@RequestHeader("Authorization") String jwt,
+                                                 @RequestParam(name = "order_id") Long orderId,
+                                                  @RequestParam(name = "payment_id") String paymentId
+    ) throws Exception {
+        //Order API
+        User user = userService.findUserProfileByJwt(jwt);
+
+        Wallet wallet = walletService.getUserWallet(user);
+        PaymentOrder order = paymentService.getPaymentOrderById(orderId);
+
+        Boolean status= paymentService.ProccedPaymentOrder(order, paymentId);
+
+//        PaymentResponse res = new PaymentResponse();
+//        res.setPayment_url("deposit success");
+
+        if (status) {
+            wallet = walletService.addBalance(wallet, order.getAmount());
+        }
+
+
+
+        return new ResponseEntity<>(wallet, HttpStatus.ACCEPTED);
+    }
+
+
+
+
+
+
 
 
 
