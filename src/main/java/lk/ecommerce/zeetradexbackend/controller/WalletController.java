@@ -41,7 +41,7 @@ public class WalletController {
 
     @PutMapping("/api/wallet/${walletId}/transfer")
     public ResponseEntity<Wallet> walletToWalletTransfer(@RequestHeader("Authorization") String jwt,
-                                                         @RequestBody Long walletId,
+                                                         @PathVariable Long walletId,
                                                          @RequestBody WalletTransaction req) throws Exception {
         User senderUser = userService.findUserProfileByJwt(jwt);
         Wallet senderWallet = walletService.getUserWallet(senderUser);

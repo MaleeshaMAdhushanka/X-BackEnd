@@ -7,7 +7,7 @@ import lk.ecommerce.zeetradexbackend.enums.VerificationType;
 @Table(name = "forgot_password_tokens")
 public class ForgotPasswordTokens {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     private String otp;
@@ -16,8 +16,8 @@ public class ForgotPasswordTokens {
 
     private String sendTo;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    //one user have one token
+    @OneToOne
     private User user;
 
     public String getId() {
