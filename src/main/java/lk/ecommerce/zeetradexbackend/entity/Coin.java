@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "coins")
 public class Coin {
     //The @JsonProperty annotation is used primarily when working with JSON serialization and deserialization in Java, typically with libraries like Jackson
+//    auto_increment is only valid for numeric types (INT, BIGINT, etc.).
     @Id
     @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String  id;
 
     @JsonProperty("symbol")
