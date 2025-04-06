@@ -30,8 +30,13 @@ public class WatchlistController {
             @RequestHeader("Authorization") String jwt) throws Exception {
 
         User user = userService.findUserProfileByJwt(jwt);
-       Watchlists watchlists = watchlistService.findUserWatchlist(user.getId());
-       return ResponseEntity.ok(watchlists);
+
+        try {
+            Watchlists watchlists = watchlistService.findUserWatchlist(user.getId());
+            return ResponseEntity.ok(watchlists);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

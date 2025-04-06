@@ -9,6 +9,7 @@ import lk.ecommerce.zeetradexbackend.repo.UserRepo;
 import lk.ecommerce.zeetradexbackend.service.CustomeUserDetailsService;
 import lk.ecommerce.zeetradexbackend.service.EmailService;
 import lk.ecommerce.zeetradexbackend.service.TwoFactorOtpService;
+import lk.ecommerce.zeetradexbackend.service.WatchlistService;
 import lk.ecommerce.zeetradexbackend.util.OtpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,10 @@ public class AuthController {
     @Autowired
     private TwoFactorOtpService twoFactorOtpService;
 
+
+    @Autowired
+    private WatchlistService watchlistService;
+
     @Autowired
     private EmailService emailService;
 
@@ -54,6 +59,8 @@ public class AuthController {
         newUser.setMobile(user.getMobile());
 
         User savedUser = userRepo.save(newUser);
+
+        watchlistService.createWatchlist(savedUser);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 user.getEmail(),

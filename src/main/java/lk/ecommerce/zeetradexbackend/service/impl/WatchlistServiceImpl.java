@@ -31,7 +31,7 @@ public class WatchlistServiceImpl implements WatchlistService {
     public Watchlists findUserWatchlist(Long userId) throws Exception {
       Watchlists watchlists =  watchlistRepo.findByUserId(userId);
         if (watchlists == null) {
-            throw  new Exception("Watchlist not found");
+            throw  new Exception("Watchlist not found" + userId);
         }
         return watchlists;
     }
