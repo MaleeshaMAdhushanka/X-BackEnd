@@ -45,7 +45,7 @@ public class AppConfig {
               CorsConfiguration cfg = new CorsConfiguration();
               cfg.setAllowedOrigins(
                       Arrays.asList(
-                              "http://localhost:5174",
+                              "http://localhost:5177",
                               "http://localhost:8080"
                       )
               );
