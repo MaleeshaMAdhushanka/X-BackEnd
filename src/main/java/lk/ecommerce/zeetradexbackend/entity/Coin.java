@@ -25,68 +25,68 @@ public class Coin {
     private String image;
 
     @JsonProperty("current_price")
-    private Double currentPrice;
+    private double currentPrice;
 
     @JsonProperty("market_cap")
-    private Double marketCap;
+    private long marketCap;
 
     @JsonProperty("market_cap_rank")
-    private Integer marketCapRank;
+    private int marketCapRank;
 
     @JsonProperty("fully_diluted_valuation")
-    private Double fullyDilutedValuation;
+    private long fullyDilutedValuation;
 
     @JsonProperty("total_volume")
-    private Long totalVolume;
+    private long totalVolume;
 
     @JsonProperty("high_24h")
-    private Double high24h;
+    private double high24h;
 
     @JsonProperty("low_24h")
-    private Double low24h;
+    private double low24h;
 
     @JsonProperty("price_change_24h")
-    private Double priceChange24h;
+    private double priceChange24h;
 
     @JsonProperty("price_change_percentage_24h")
-    private Double priceChangePercentage24h;
+    private double priceChangePercentage24h;
 
     @JsonProperty("market_cap_change_24h")
-    private Long marketCapChange24h;
+    private long marketCapChange24h;
 
     @JsonProperty("market_cap_change_percentage_24h")
-    private Long marketCapChangePercentage24h;
+    private double marketCapChangePercentage24h;
 
     @JsonProperty("circulating_supply")
-    private Double circulatingSupply;
+    private long circulatingSupply;
 
     @JsonProperty("total_supply")
-    private Long totalSupply;
+    private long totalSupply;
 
     @JsonProperty("max_supply")
-    private Double maxSupply;
+    private long maxSupply;
 
     @JsonProperty("ath")
-    private Double ath;
+    private double ath;
 
     @JsonProperty("ath_change_percentage")
-    private Double athChangePercentage;
+    private double athChangePercentage;
 
     @JsonProperty("ath_date")
     private LocalDateTime athDate;
 
     @JsonProperty("atl")
-    private Double atl;
+    private double atl;
 
     @JsonProperty("atl_change_percentage")
-    private Double atlChangePercentage;
+    private double atlChangePercentage;
 
     @JsonProperty("atl_date")
     private LocalDateTime atlDate;
 
     @JsonProperty("roi")
     @JsonIgnore
-    private Double roi;
+    private double roi;
 
     @JsonProperty("last_updated")
     private LocalDateTime lastUpdated;
@@ -123,132 +123,131 @@ public class Coin {
         this.image = image;
     }
 
-    public Double getCurrentPrice() {
+    public double getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(Double currentPrice) {
+    public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
     }
 
-    public Double getMarketCap() {
+    public long getMarketCap() {
         return marketCap;
     }
 
-    public void setMarketCap(Double marketCap) {
+    public void setMarketCap(long marketCap) {
         this.marketCap = marketCap;
     }
 
-    public Integer getMarketCapRank() {
+    public int getMarketCapRank() {
         return marketCapRank;
     }
 
-    public void setMarketCapRank(Integer marketCapRank) {
+    public void setMarketCapRank(int marketCapRank) {
         this.marketCapRank = marketCapRank;
     }
 
-    public Double getFullyDilutedValuation() {
+    public long getFullyDilutedValuation() {
         return fullyDilutedValuation;
     }
 
-    public void setFullyDilutedValuation(Double fullyDilutedValuation) {
+    public void setFullyDilutedValuation(long fullyDilutedValuation) {
         this.fullyDilutedValuation = fullyDilutedValuation;
     }
 
-    public Long getTotalVolume() {
+    public long getTotalVolume() {
         return totalVolume;
     }
 
-    public void setTotalVolume(Long totalVolume) {
+    public void setTotalVolume(long totalVolume) {
         this.totalVolume = totalVolume;
     }
 
-    public Double getHigh24h() {
+    public double getHigh24h() {
         return high24h;
     }
 
-    public void setHigh24h(Double high24h) {
+    public void setHigh24h(double high24h) {
         this.high24h = high24h;
     }
 
-    public Double getLow24h() {
+    public double getLow24h() {
         return low24h;
     }
 
-    public void setLow24h(Double low24h) {
+    public void setLow24h(double low24h) {
         this.low24h = low24h;
     }
 
-    public Double getPriceChange24h() {
+    public double getPriceChange24h() {
         return priceChange24h;
     }
 
-    public void setPriceChange24h(Double priceChange24h) {
+    public void setPriceChange24h(double priceChange24h) {
         this.priceChange24h = priceChange24h;
     }
 
-    public Double getPriceChangePercentage24h() {
+    public double getPriceChangePercentage24h() {
         return priceChangePercentage24h;
     }
 
-    public void setPriceChangePercentage24h(Double priceChangePercentage24h) {
+    public void setPriceChangePercentage24h(double priceChangePercentage24h) {
         this.priceChangePercentage24h = priceChangePercentage24h;
     }
 
-
-    public Long getMarketCapChange24h() {
+    public long getMarketCapChange24h() {
         return marketCapChange24h;
     }
 
-    public void setMarketCapChange24h(Long marketCapChange24h) {
+    public void setMarketCapChange24h(long marketCapChange24h) {
         this.marketCapChange24h = marketCapChange24h;
     }
 
-    public Long getMarketCapChangePercentage24h() {
+    public double getMarketCapChangePercentage24h() {
         return marketCapChangePercentage24h;
     }
 
-    public void setMarketCapChangePercentage24h(Long marketCapChangePercentage24h) {
+    public void setMarketCapChangePercentage24h(double marketCapChangePercentage24h) {
         this.marketCapChangePercentage24h = marketCapChangePercentage24h;
     }
 
-    public Double getCirculatingSupply() {
+    public long getCirculatingSupply() {
         return circulatingSupply;
     }
 
-    public void setCirculatingSupply(Double circulatingSupply) {
+    public void setCirculatingSupply(long circulatingSupply) {
         this.circulatingSupply = circulatingSupply;
     }
 
-    public Long getTotalSupply() {
+    public long getTotalSupply() {
         return totalSupply;
     }
 
-    public void setTotalSupply(Long totalSupply) {
+    public void setTotalSupply(long totalSupply) {
         this.totalSupply = totalSupply;
     }
 
-    public Double getMaxSupply() {
+    public long getMaxSupply() {
         return maxSupply;
     }
 
-    public void setMaxSupply(Double maxSupply) {
+    public void setMaxSupply(long maxSupply) {
         this.maxSupply = maxSupply;
     }
 
-    public Double getAth() {
+    public double getAth() {
         return ath;
     }
 
-    public void setAth(Double ath) {
+    public void setAth(double ath) {
         this.ath = ath;
     }
 
-    public Double getAthChangePercentage() {
+    public double getAthChangePercentage() {
         return athChangePercentage;
     }
 
-    public void setAthChangePercentage(Double athChangePercentage) {
+    public void setAthChangePercentage(double athChangePercentage) {
         this.athChangePercentage = athChangePercentage;
     }
 
@@ -260,19 +259,19 @@ public class Coin {
         this.athDate = athDate;
     }
 
-    public Double getAtl() {
+    public double getAtl() {
         return atl;
     }
 
-    public void setAtl(Double atl) {
+    public void setAtl(double atl) {
         this.atl = atl;
     }
 
-    public Double getAtlChangePercentage() {
+    public double getAtlChangePercentage() {
         return atlChangePercentage;
     }
 
-    public void setAtlChangePercentage(Double atlChangePercentage) {
+    public void setAtlChangePercentage(double atlChangePercentage) {
         this.atlChangePercentage = atlChangePercentage;
     }
 
@@ -284,11 +283,11 @@ public class Coin {
         this.atlDate = atlDate;
     }
 
-    public Double getRoi() {
+    public double getRoi() {
         return roi;
     }
 
-    public void setRoi(Double roi) {
+    public void setRoi(double roi) {
         this.roi = roi;
     }
 

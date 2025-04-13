@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -24,6 +25,10 @@ public class AppConfig {
 
     public AppConfig(CorsConfigurationSource corsConfigurationSource) {
         this.corsConfigurationSource = corsConfigurationSource;
+    }
+    @Bean
+    public RestTemplate restTemplate(){
+        return  new RestTemplate();
     }
   @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,7 +50,7 @@ public class AppConfig {
               CorsConfiguration cfg = new CorsConfiguration();
               cfg.setAllowedOrigins(
                       Arrays.asList(
-                              "http://localhost:5177",
+                              "http://localhost:5173",
                               "http://localhost:8080"
                       )
               );

@@ -23,54 +23,82 @@ public class CoinController {
     private ObjectMapper objectMapper;
 
     @GetMapping
-    ResponseEntity<List<Coin>>getCoinList(@RequestParam(required = false, name ="page") int page) throws Exception {
-        List<Coin> coin = coinService.getCoinList(page);
-        return new ResponseEntity<>(coin, HttpStatus.ACCEPTED);
+    ResponseEntity<List<Coin>>getCoinList(@RequestParam(name = "page", defaultValue = "1") int page)  {
+
+        try {
+            List<Coin> coinList = coinService.getCoinList(page);
+            return new ResponseEntity<>(coinList, HttpStatus.OK);
+        } catch (Exception e) {
+            // Return a bad request response if something goes wrong
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{coinId}/chart")
     ResponseEntity<JsonNode>getMarketChart(@PathVariable String coinId,
-                                           @RequestParam("days") int days ) throws Exception {
+                                           @RequestParam("days") int days )  {
 
-        String res = coinService.getMarketChart(coinId, days);
-        JsonNode jsonNode = objectMapper.readTree(res);
+        try {
+            String res = coinService.getMarketChart(coinId, days);
+            JsonNode jsonNode = objectMapper.readTree(res);
 
-        return new ResponseEntity<>(jsonNode, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(jsonNode, HttpStatus.OK);
+        } catch (Exception e) {
+            return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/search")
-    ResponseEntity<JsonNode>searchCoin(@RequestParam("q") String keyword) throws Exception {
+    ResponseEntity<JsonNode>searchCoin(@RequestParam("q") String keyword) {
 
-        String coin = coinService.searchCoin(keyword);
-        JsonNode jsonNode = objectMapper.readTree(coin);
+        try {
+            String coin = coinService.searchCoin(keyword);
+            JsonNode jsonNode = objectMapper.readTree(coin);
 
-        return ResponseEntity.ok(jsonNode);
+            return ResponseEntity.ok(jsonNode);
+        } catch (Exception e) {
+            return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     @GetMapping("/top50")
-    ResponseEntity<JsonNode> getTop50CoinsByMarketCapRank() throws Exception {
-        String coin = coinService.getTop50CoinsByMarketCapRank();
+    ResponseEntity<JsonNode> getTop50CoinsByMarketCapRank() {
+        try {
+            String coin = coinService.getTop50CoinsByMarketCapRank();
 
-        JsonNode jsonNode = objectMapper.readTree(coin);
+            JsonNode jsonNode = objectMapper.readTree(coin);
 
-        return ResponseEntity.ok(jsonNode);
+            return ResponseEntity.ok(jsonNode);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/trending")
-    ResponseEntity<JsonNode> getTradingCoin() throws Exception {
-        String coin = coinService.getTreadingCoins();
+    ResponseEntity<JsonNode> getTradingCoin()  {
+        try {
+            String coin = coinService.getTreadingCoins();
 
-        JsonNode jsonNode = objectMapper.readTree(coin);
+            JsonNode jsonNode = objectMapper.readTree(coin);
 
-        return ResponseEntity.ok(jsonNode);
+            return ResponseEntity.ok(jsonNode);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/details/{coinId}")
-    ResponseEntity<JsonNode> getCoinDetails(@PathVariable String coinId) throws Exception {
-      String coin =  coinService.getCoinDetails(coinId);
-      JsonNode jsonNode = objectMapper.readTree(coin);
+    ResponseEntity<JsonNode> getCoinDetails(@PathVariable String coinId)  {
+        try {
+            String coin =  coinService.getCoinDetails(coinId);
+            JsonNode jsonNode = objectMapper.readTree(coin);
 
-      return ResponseEntity.ok(jsonNode);
+            return ResponseEntity.ok(jsonNode);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
 
     }
 
