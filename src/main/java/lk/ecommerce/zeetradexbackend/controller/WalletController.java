@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
-@RequestMapping("/api/wallet")
 public class WalletController {
 
     @Autowired
@@ -83,6 +84,9 @@ public class WalletController {
 //        res.setPayment_url("deposit success");
 
         if (status) {
+            if (wallet.getBalance() == null){
+                wallet.setBalance(BigDecimal.valueOf(0));
+            }
             wallet = walletService.addBalance(wallet, order.getAmount());
         }
 

@@ -27,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentOrderRepo paymentOrderRepo;
 
     //ApI keys
-    @Value("${stipe.api.key}")
+    @Value("${stripe.api.key}")
     private String stripeSecretKey;
 
 
@@ -42,20 +42,24 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentOrder createOrder(User user, Long amount, PaymentMethod paymentMethod) {
         PaymentOrder paymentOrder = new PaymentOrder();
-        paymentOrder.setId(user.getId());
+        paymentOrder.setUser(user);
         paymentOrder.setAmount(amount);
         paymentOrder.setPaymentMethod(paymentMethod);
+        paymentOrder.setStatus(PaymentOrderStatus.PENDING);
 
         return paymentOrderRepo.save(paymentOrder);
     }
 
     @Override
     public PaymentOrder getPaymentOrderById(Long id) throws Exception {
-        return paymentOrderRepo.findById(id).orElseThrow(()->new Exception("Payment Order Not Found"));
+        return paymentOrderRepo.findById(id).orElseThrow(() -> new Exception("Payment Order Not Found"));
     }
 
     @Override
     public Boolean ProccedPaymentOrder(PaymentOrder paymentOrder, String paymentId) throws RazorpayException {
+        if (paymentOrder.getStatus() == null){
+            paymentOrder.setStatus(PaymentOrderStatus.PENDING);
+        }
         if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
             if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)) {
                 RazorpayClient razorpay = new RazorpayClient(apikey, apiSecretKey);
@@ -86,7 +90,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponse createRazorPaymentLink(User user, Long amount) throws RazorpayException {
 
-        Long Amount = amount * 100;
+        long Amount = amount * 100;
 
         try {
             //create razorpay client with key id and secret
@@ -106,29 +110,27 @@ public class PaymentServiceImpl implements PaymentService {
 
             //Create a josn object with the notification settings
             JSONObject notify = new JSONObject();
-            notify.put("email",true);
-            paymentLinkRequest.put("notify",notify);
+            notify.put("email", true);
+            paymentLinkRequest.put("notify", notify);
 
             //set The reminder settings
-            paymentLinkRequest.put("reminder_enable",true);
+            paymentLinkRequest.put("reminder_enable", true);
 
             //set the Callback URL  and method
-            paymentLinkRequest.put("callback_url","https://localhost:8080/wallet");
-            paymentLinkRequest.put("callback_method","get");
+            paymentLinkRequest.put("callback_url", "https://localhost:8080/wallet");
+            paymentLinkRequest.put("callback_method", "get");
 
             //Create the payment link using the payment.create() method
-           PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
+            PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
 
-           //response to user
-           String paymentLink = payment.get("id");
-           String paymentLinkUrl = payment.get("short_url");
+            //response to user
+            String paymentLink = payment.get("id");
+            String paymentLinkUrl = payment.get("short_url");
 
-           PaymentResponse res = new PaymentResponse();
-           res.setPayment_url(paymentLinkUrl);
+            PaymentResponse res = new PaymentResponse();
+            res.setPayment_url(paymentLinkUrl);
 
-           return res;
-
-
+            return res;
 
 
         } catch (RazorpayException e) {
@@ -145,25 +147,19 @@ public class PaymentServiceImpl implements PaymentService {
         SessionCreateParams params = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("https://localhost:8080/wallet?order_id=" +orderId)
+                .setSuccessUrl("https://localhost:8080/wallet?order_id=" + orderId.getId())
                 .setCancelUrl("https://localhost:8080/payment/cancel")
                 .addLineItem(SessionCreateParams.LineItem.builder()
                         .setQuantity(1L)
                         .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
-                                        .setCurrency("usd")
-                                        .setUnitAmount(amount * 100)
-                                        .setProductData( SessionCreateParams
-                                                .LineItem
-                                                .PriceData
-                                                .ProductData
-                                                .builder()
-                                                .setName("Top up wallet")
-                                                .build()
-                                        ).build()
-
-                        ).build()
-                ).build();
-
+                                .setCurrency("usd")
+                                .setUnitAmount(amount * 100)
+                                .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                        .setName("Top up wallet")
+                                        .build())
+                                .build())
+                        .build())
+                .build();
 
         Session session = Session.create(params);
         System.out.println("Session____" + session);
@@ -172,6 +168,7 @@ public class PaymentServiceImpl implements PaymentService {
         res.setPayment_url(session.getUrl());
 
         return res;
+
 
     }
 }

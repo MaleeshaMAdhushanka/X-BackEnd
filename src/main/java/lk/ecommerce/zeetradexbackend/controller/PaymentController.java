@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/payment")
 public class PaymentController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @PostMapping("/api/payment/{paymentMethod}/amount/{amount}")
+    @PostMapping("/{paymentMethod}/amount/{amount}")
     public ResponseEntity<PaymentResponse> paymentHandler(
             @PathVariable PaymentMethod paymentMethod,
             @PathVariable Long amount,
@@ -31,10 +31,13 @@ public class PaymentController {
 
         User user = userService.findUserProfileByJwt(jwt);
 
-        //defining payment response as null
-        PaymentResponse paymentResponse;
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         PaymentOrder order = paymentService.createOrder(user, amount, paymentMethod);
+        //defining payment response as null
+        PaymentResponse paymentResponse;
 
         if (paymentMethod.equals(PaymentMethod.RAZORPAY)) {
             paymentResponse = paymentService.createRazorPaymentLink(user, amount);

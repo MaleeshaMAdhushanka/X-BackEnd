@@ -113,7 +113,7 @@ public class CoinServiceImpl implements CoinService {
             JsonNode marketData = jsonNode.get("market_data");
 
             coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
-            coin.setMarketCap(marketData.get("market_cap").get("usd").asDouble());
+            coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
             coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
             coin.setTotalVolume(marketData.get("total_volume").get("usd").asLong());
             coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
@@ -121,23 +121,23 @@ public class CoinServiceImpl implements CoinService {
             coin.setPriceChange24h(marketData.get("price_change_24h").asDouble());
             coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").asDouble());
 
+            coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asLong());
+
+            coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asLong());
+
+
+
+
             //get null point exception fixing it
 //            JsonNode marketCapChange24hNode =marketData.get("market_cap_change_24h").get("usd");
 //            if (marketCapChange24hNode != null) {
 //                coin.setMarketCapChange24h(marketCapChange24hNode.asLong());
 //
 //            }
-            JsonNode marketCapChange24hNode = marketData.get("market_cap_change_24h");
-            if (marketCapChange24hNode != null && marketCapChange24hNode.has("usd")) {
-                coin.setMarketCapChange24h(marketCapChange24hNode.get("usd").asLong());
-            }
+//            JsonNode marketCapChange24hNode = marketData.get("market_cap_change_24h");
+//            if (marketCapChange24hNode != null && marketCapChange24hNode.has("usd")) {
+//            }
 
-
-
-            JsonNode marketCapChangePercentage24hNode = marketData.get("market_cap_change_percentage_24h");
-            if (marketCapChangePercentage24hNode != null) {
-               coin.setMarketCapChangePercentage24h(marketCapChangePercentage24hNode.asLong());
-            }
 
             coin.setTotalSupply(marketData.get("total_supply").asLong());
             coinServiceRepo.save(coin);
