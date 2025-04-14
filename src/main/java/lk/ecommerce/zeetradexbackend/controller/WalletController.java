@@ -1,11 +1,9 @@
 package lk.ecommerce.zeetradexbackend.controller;
 
 import lk.ecommerce.zeetradexbackend.entity.*;
+import lk.ecommerce.zeetradexbackend.enums.WalletTransactionType;
 import lk.ecommerce.zeetradexbackend.response.PaymentResponse;
-import lk.ecommerce.zeetradexbackend.service.OrderService;
-import lk.ecommerce.zeetradexbackend.service.PaymentService;
-import lk.ecommerce.zeetradexbackend.service.UserService;
-import lk.ecommerce.zeetradexbackend.service.WalletService;
+import lk.ecommerce.zeetradexbackend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +26,9 @@ public class WalletController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private TransactionService transactionService;
+
 
 
     @GetMapping("/api/wallet")
@@ -48,6 +49,16 @@ public class WalletController {
         Wallet senderWallet = walletService.getUserWallet(senderUser);
         Wallet receiverWallet = walletService.findWalletById(walletId);
         Wallet wallet = walletService.walletToWalletTransfer(senderUser, senderWallet, receiverWallet, req.getAmount());
+
+        transactionService.createTransaction(wallet,
+                WalletTransactionType.WALLET_TRANSACTION,
+                receiverWallet.getId(),
+                req.getPurpose(),
+                req.getAmount());
+
+
+
+
         return new ResponseEntity<>(wallet, HttpStatus.OK);
     }
 

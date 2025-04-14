@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "coins")
@@ -73,7 +74,7 @@ public class Coin {
     private double athChangePercentage;
 
     @JsonProperty("ath_date")
-    private LocalDateTime athDate;
+    private OffsetDateTime athDate;
 
     @JsonProperty("atl")
     private double atl;
@@ -82,14 +83,14 @@ public class Coin {
     private double atlChangePercentage;
 
     @JsonProperty("atl_date")
-    private LocalDateTime atlDate;
+    private OffsetDateTime atlDate;
 
     @JsonProperty("roi")
     @JsonIgnore
     private double roi;
 
     @JsonProperty("last_updated")
-    private LocalDateTime lastUpdated;
+    private OffsetDateTime lastUpdated;
 
     public String getId() {
         return id;
@@ -251,11 +252,11 @@ public class Coin {
         this.athChangePercentage = athChangePercentage;
     }
 
-    public LocalDateTime getAthDate() {
+    public OffsetDateTime getAthDate() {
         return athDate;
     }
 
-    public void setAthDate(LocalDateTime athDate) {
+    public void setAthDate(OffsetDateTime athDate) {
         this.athDate = athDate;
     }
 
@@ -275,11 +276,12 @@ public class Coin {
         this.atlChangePercentage = atlChangePercentage;
     }
 
-    public LocalDateTime getAtlDate() {
+
+    public OffsetDateTime getAtlDate() {
         return atlDate;
     }
 
-    public void setAtlDate(LocalDateTime atlDate) {
+    public void setAtlDate(OffsetDateTime atlDate) {
         this.atlDate = atlDate;
     }
 
@@ -291,11 +293,11 @@ public class Coin {
         this.roi = roi;
     }
 
-    public LocalDateTime getLastUpdated() {
+    public OffsetDateTime getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
+    public void setLastUpdated(OffsetDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }

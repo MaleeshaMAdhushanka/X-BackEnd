@@ -12,7 +12,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private BigDecimal balance;
+    //default balance is 0
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

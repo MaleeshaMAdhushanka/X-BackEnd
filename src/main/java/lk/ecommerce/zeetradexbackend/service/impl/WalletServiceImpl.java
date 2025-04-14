@@ -24,6 +24,7 @@ public class WalletServiceImpl implements WalletService {
         if (wallet == null) {
             wallet= new Wallet();
             wallet.setUser(user);
+            walletRepo.save(wallet);
         }
 
         return wallet;
@@ -48,27 +49,56 @@ public class WalletServiceImpl implements WalletService {
         throw  new Exception("Wallet not found");
     }
 
-    @Override
-    public Wallet walletToWalletTransfer(User sender, Wallet receiver, Wallet receiverWallet, Long amount) throws Exception {
+//    @Override
+//    public Wallet walletToWalletTransfer(User sender, Wallet receiver, Wallet receiverWallet, Long amount) throws Exception {
+//
+//        Wallet senderWallet = getUserWallet(sender);
+//
+//        if (senderWallet.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
+//            throw new Exception("Insufficient balance....");
+//        }
+//        //now update the sender wallet balance
+//        BigDecimal senderBalance = senderWallet
+//                .getBalance()
+//                .subtract(BigDecimal.valueOf(amount));
+//         senderWallet.setBalance(senderBalance);
+//
+//         walletRepo.save(senderWallet);
+//
+//         BigDecimal receiverBalance = receiverWallet.getBalance().add(BigDecimal.valueOf(amount));
+//
+//       //now update the balance
+//        receiverWallet.setBalance(receiverBalance);
+//        walletRepo.save(receiverWallet);
+//        return senderWallet;
+//    }
+@Override
+public Wallet walletToWalletTransfer(User sender, Wallet receiver, Wallet receiverWallet, Long amount) throws Exception {
 
-        Wallet senderWallet = getUserWallet(sender);
-        if (senderWallet.getBalance().compareTo(BigDecimal.valueOf(amount))<0) {
-            throw new Exception("Insufficient balance....");
-        }
-        //now update the sender wallet balance
-        BigDecimal senderBalance = senderWallet
-                .getBalance()
-                .subtract(BigDecimal.valueOf(amount));
-         senderWallet.setBalance(senderBalance);
+    Wallet senderWallet = getUserWallet(sender);
 
-         walletRepo.save(senderWallet);
+    BigDecimal transferAmount = BigDecimal.valueOf(amount);
+    BigDecimal currentBalance = senderWallet.getBalance();
 
-         BigDecimal receiverBalance = receiverWallet.getBalance().add(BigDecimal.valueOf(amount));
+    System.out.println("Sender Wallet Balance: " + currentBalance);
+    System.out.println("Requested Transfer Amount: " + transferAmount);
 
-       //now update the balance
-        receiverWallet.setBalance(receiverBalance);
-        return senderWallet;
+    if (currentBalance.compareTo(transferAmount) < 0) {
+        throw new Exception("Insufficient balance. You have " + currentBalance + ", but tried to send " + transferAmount);
     }
+
+    // Subtract from sender
+    BigDecimal updatedSenderBalance = currentBalance.subtract(transferAmount);
+    senderWallet.setBalance(updatedSenderBalance);
+    walletRepo.save(senderWallet);
+
+    // Add to receiver
+    BigDecimal updatedReceiverBalance = receiverWallet.getBalance().add(transferAmount);
+    receiverWallet.setBalance(updatedReceiverBalance);
+    walletRepo.save(receiverWallet);
+
+    return senderWallet;
+}
 
     @Override
     public Wallet payOrderPayment(Order order, User user) throws Exception {

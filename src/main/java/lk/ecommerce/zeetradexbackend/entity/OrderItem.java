@@ -10,11 +10,11 @@ public class OrderItem {
    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Double quantity;
+    private double quantity;
 
-    private Double buyPrice;
+    private double buyPrice;
 
-    private Double sellPrice;
+    private double sellPrice;
 
     @ManyToOne
     @JoinColumn(name = "coin_id", nullable = false)

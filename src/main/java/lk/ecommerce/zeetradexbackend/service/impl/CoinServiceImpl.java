@@ -8,10 +8,7 @@ import lk.ecommerce.zeetradexbackend.repo.CoinServiceRepo;
 import lk.ecommerce.zeetradexbackend.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -66,7 +63,7 @@ public class CoinServiceImpl implements CoinService {
     @Override
     public String getMarketChart(String coinId, int days) throws Exception {
 
-        String url = "https://api.coingecko.com/api/v3/coins/"+coinId+"/market_chart?vs_currency=usd&days="+days;
+        String url = "https://api.coingecko.com/api/v3/coins/"+coinId+"/market_chart?vs_currency=usd&days=" + days;
         //url ready now fetch data
 //        RestTemplate restTemplate = new RestTemplate();
 
@@ -74,11 +71,9 @@ public class CoinServiceImpl implements CoinService {
         try {
             HttpHeaders headers = new HttpHeaders();
 //            headers.set("x-cg-demo-api-key", API_KEY);
-            HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -185,7 +180,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public String getTop50CoinsByMarketCapRank() throws Exception {
-        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=50&page=1";
+        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=40&page=1";
         //url ready now fetch data
 //        RestTemplate restTemplate = new RestTemplate();
 
@@ -195,13 +190,23 @@ public class CoinServiceImpl implements CoinService {
 //            headers.set("x-cg-demo-api-key", API_KEY);
             HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            //add delay to prevent reate limiting
+            Thread.sleep(10000);
 
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            if (response.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                 throw  new Exception("Coin gecko Api rete limit exceeded");
+            }
 
             return response.getBody();
 
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            throw new Exception(e.getMessage());
+        } catch (HttpClientErrorException.TooManyRequests e) {
+            throw new Exception("CoinGecko API rate limit exceeded. Please try again later.");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw  new Exception("Request interrupted");
+        } catch (Exception e) {
+            throw new Exception("Failed to fetch top 50 coins: " + e.getMessage());
         }
 
     }
