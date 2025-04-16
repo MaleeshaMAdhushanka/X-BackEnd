@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +35,13 @@ public class CoinServiceImpl implements CoinService {
 
 //    @Value("${coingecko.api.key}")
 //    private String API_KEY;
+
+    //cache to hold karannna API result and timestamps
+
+   private final Map<String, String> marketChartCache = new HashMap<>();
+   private final Map<String, Long> cacheTimestamps = new HashMap<>();
+
+   private static  final long CACHE_DURATION_MS = 60 * 1000;
 
 
     @Override
@@ -62,22 +70,28 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public String getMarketChart(String coinId, int days) throws Exception {
+        String cacheKey = coinId + "-" + days;
+        long now = System.currentTimeMillis();
 
-        String url = "https://api.coingecko.com/api/v3/coins/"+coinId+"/market_chart?vs_currency=usd&days=" + days;
-        //url ready now fetch data
-//        RestTemplate restTemplate = new RestTemplate();
+        if (marketChartCache.containsKey(cacheKey) && (now - cacheTimestamps.get(cacheKey)) < CACHE_DURATION_MS) {
+            return marketChartCache.get(cacheKey);
+        }
 
+        String url = "https://api.coingecko.com/api/v3/coins/" + coinId + "/market_chart?vs_currency=usd&days=" + days;
 
         try {
             HttpHeaders headers = new HttpHeaders();
-//            headers.set("x-cg-demo-api-key", API_KEY);
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            return response.getBody();
 
+            // Save to cache
+            marketChartCache.put(cacheKey, response.getBody());
+            cacheTimestamps.put(cacheKey, now);
+
+            return response.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            throw new Exception(e.getMessage());
+            throw new Exception("Error fetching market chart: " + e.getMessage());
         }
     }
 
@@ -107,18 +121,53 @@ public class CoinServiceImpl implements CoinService {
 
             JsonNode marketData = jsonNode.get("market_data");
 
-            coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
-            coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
-            coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
-            coin.setTotalVolume(marketData.get("total_volume").get("usd").asLong());
-            coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
-            coin.setLow24h(marketData.get("low_24h").get("usd").asDouble());
-            coin.setPriceChange24h(marketData.get("price_change_24h").asDouble());
-            coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").asDouble());
+//            coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
+//            coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
+//            coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
+//            coin.setTotalVolume(marketData.get("total_volume").get("usd").asLong());
+//            coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
+//            coin.setLow24h(marketData.get("low_24h").get("usd").asDouble());
+//            coin.setPriceChange24h(marketData.get("price_change_24h").asDouble());
+//            coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").asDouble());
+//
+//            coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asLong());
 
-            coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asLong());
+//            coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asLong());
+            JsonNode node;
 
-            coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asLong());
+            node = marketData.get("current_price").get("usd");
+            coin.setCurrentPrice(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("market_cap").get("usd");
+            coin.setMarketCap(node != null ? node.asLong() : 0L);
+
+            node = marketData.get("market_cap_rank");
+            coin.setMarketCapRank(node != null ? node.asInt() : 0);
+
+            node = marketData.get("total_volume").get("usd");
+            coin.setTotalVolume(node != null ? node.asLong() : 0L);
+
+            node = marketData.get("high_24h").get("usd");
+            coin.setHigh24h(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("low_24h").get("usd");
+            coin.setLow24h(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("price_change_24h");
+            coin.setPriceChange24h(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("price_change_percentage_24h");
+            coin.setPriceChangePercentage24h(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("market_cap_change_24h");
+            coin.setMarketCapChange24h(node != null ? node.asLong() : 0L);
+
+            node = marketData.get("market_cap_change_percentage_24h");
+            coin.setMarketCapChangePercentage24h(node != null ? node.asDouble() : 0.0);
+
+            node = marketData.get("total_supply");
+            coin.setTotalSupply(node != null && !node.isNull() ? node.asLong() : 0L);
+
 
 
 
@@ -134,7 +183,7 @@ public class CoinServiceImpl implements CoinService {
 //            }
 
 
-            coin.setTotalSupply(marketData.get("total_supply").asLong());
+//            coin.setTotalSupply(marketData.get("total_supply").asLong());
             coinServiceRepo.save(coin);
             return response.getBody();
 
@@ -180,7 +229,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public String getTop50CoinsByMarketCapRank() throws Exception {
-        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=40&page=1";
+        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=50&page=1";
         //url ready now fetch data
 //        RestTemplate restTemplate = new RestTemplate();
 
