@@ -3,6 +3,10 @@
 ## Project Description
 This is a full-stack cryptocurrency trading platform built using **Spring Boot** for the backend and **React.js** with **Vite.js** for the frontend. The platform integrates with the **CoinGecko API** to fetch real-time cryptocurrency data, enabling users to view current prices, buy and sell assets, and manage their portfolios.
 
+## ▶️ Project Demo (YouTube)
+
+[![Watch the demo](https://img.youtube.com/vi/GpCEurOzY-s/0.jpg)](https://youtu.be/GpCEurOzY-s)
+(https://youtu.be/GpCEurOzY-s)
 ## Key Features
 - **Real-Time Cryptocurrency Data**: Fetch current prices and market trends using the **CoinGecko API**.
 - **User Authentication**: Secure login and registration system for users.
